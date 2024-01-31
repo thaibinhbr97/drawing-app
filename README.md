@@ -1,5 +1,6 @@
-## Drawing Web App: https://thaibinhbr97.github.io/drawing-app/web/creator.html
-## Machine Learning Web App: https://thaibinhbr97.github.io/drawing-app/web/viewer.html
+# drawing-app
+### Drawing Web App: https://thaibinhbr97.github.io/drawing-app/web/creator.html
+### Machine Learning Web App: https://thaibinhbr97.github.io/drawing-app/web/viewer.html
 
 ## Techniques used for this project:
 - Drawing App with JavaScript
@@ -17,10 +18,7 @@
 
 1. Open the terminal inside the package directory
 
-2. Go inside the node directory within that package
-Command: cd node
-
-3. Install the package:
+2. Install the package:
 Command: npm install
 
 # Tools
