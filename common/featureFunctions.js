@@ -2,6 +2,10 @@ if (typeof geometry === "undefined") {
    geometry = require("./geometry")
 }
 
+if (typeof draw === "undefined") {
+   draw = require("./draw")
+}
+
 const featureFunctions = {};
 
 featureFunctions.getPathCount = (paths) => {
@@ -41,13 +45,35 @@ featureFunctions.getRoundness = (paths) => {
    return geometry.roundness(hull);
 }
 
+featureFunctions.getPixels = (paths, size = 400, expand = true) => {
+   let canvas = null;
+
+   try {
+      // for web
+      canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+   } catch (err) {
+      // for node
+      const { createCanvas } = require("../node_modules/canvas");
+      canvas = createCanvas(size, size);
+   }
+
+   const ctx = canvas.getContext("2d");
+
+   const imgData = ctx.getImageData(0, 0, size, size);
+   return imgData.data.filter((val, index) => index % 4 == 3);
+
+}
+
 featureFunctions.inUse = [
    //{name:"Path Count",function:featureFunctions.getPathCount},
    //{name:"Point Count",function:featureFunctions.getPointCount},
    { name: "Width", function: featureFunctions.getWidth },
    { name: "Height", function: featureFunctions.getHeight },
    { name: "Elongation", function: featureFunctions.getElongation },
-   { name: "Roundness", function: featureFunctions.getRoundness }
+   { name: "Roundness", function: featureFunctions.getRoundness },
+   { name: "Complexity", function: featureFunctions.getComplexity }
 ];
 
 if (typeof module !== "undefined") {
