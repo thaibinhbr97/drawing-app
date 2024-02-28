@@ -81,6 +81,19 @@ function generateImageFile(outFile, paths) {
    // // draw.path(ctx, [...vertices, vertices[0]], "red");
    // draw.path(ctx, [...hull, hull[0]], color, 10);
 
+   const pixels = featureFunctions.getPixels(paths);
+   const size = Math.sqrt(pixels.length);
+   const imgData = ctx.getImageData(0, 0, size, size);
+   for (let i = 0; i < pixels.length; i++) {
+      const alpha = pixels[i];
+      const startIndex = i * 4;
+      imgData.data[startIndex] = 0;
+      imgData.data[startIndex + 1] = 0;
+      imgData.data[startIndex + 2] = 0;
+      imgData.data[startIndex + 3] = alpha;
+   }
+   ctx.putImageData(imgData, 0, 0);
+
    const buffer = canvas.toBuffer("image/png");
    fs.writeFileSync(outFile, buffer);
 }
