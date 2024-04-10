@@ -61,10 +61,39 @@ featureFunctions.getPixels = (paths, size = 400, expand = true) => {
 
    const ctx = canvas.getContext("2d");
 
+   if (expand) {
+      const points = paths.flat();
+
+      const bounds = {
+         left: Math.min(...points.map((p) => p[0])),
+         right: Math.max(...points.map((p) => p[0])),
+         top: Math.min(...points.map((p) => p[1])),
+         bottom: Math.max(...points.map((p) => p[1]))
+      };
+
+      const newPaths = [];
+      for (const path of paths) {
+         const newPoints = path.map(p =>
+            [
+               utils.invLerp(bounds.left, bounds.right, p[0]) * size,
+               utils.invLerp(bounds.top, bounds.bottom, p[1]) * size,
+            ]
+         );
+         newPaths.push(newPoints);
+      }
+      draw.paths(ctx, newPaths);
+   } else {
+      draw.paths(ctx, paths);
+   }
+
    const imgData = ctx.getImageData(0, 0, size, size);
    return imgData.data.filter((val, index) => index % 4 == 3);
-
 }
+
+featureFunctions.getComplexity = (paths) => {
+   const pixels = featureFunctions.getPixels(paths);
+   return pixels.filter((a) => a != 0).length;
+};
 
 featureFunctions.inUse = [
    //{name:"Path Count",function:featureFunctions.getPathCount},
